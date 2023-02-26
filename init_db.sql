@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(60) DEFAULT NULL,
   `role` varchar(60) DEFAULT NULL,
   `token` varchar(60) DEFAULT NULL,
-  `token_exp` DATETIME DEFAULT NULL,
+  `token_exp` TIMESTAMP DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

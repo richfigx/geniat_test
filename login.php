@@ -34,8 +34,7 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
 			    $stmt->bindValue(':token_exp', $data_token['exp']);
 			    $stmt->bindValue(':id', $row['id']);
 			    
-			    
-			    if ($stmt->execute()) {
+			    if ($stmt->execute() &&  $stmt->rowCount()) {
 				    $data = ['token' => $jwt];
                     } else {
                         $error = true;
