@@ -27,11 +27,12 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
 		    $jwt = generate_jwt_token($data_token);
               try {
 			    
-			    $query = "UPDATE users (token,token_exp) VALUES (:token,:token_exp)";
+			    $query = "UPDATE users (token,token_exp) VALUES (:token,:token_exp) WHERE id = :id";
 			    $stmt = $con->prepare($query);
 			    
 			    $stmt->bindValue(':token', $jwt);
 			    $stmt->bindValue(':token_exp', $data_token['exp']);
+			    $stmt->bindValue(':id', $row['id']);
 			    
 			    
 			    if ($stmt->execute()) {
