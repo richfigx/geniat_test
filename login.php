@@ -26,7 +26,7 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
               $data_token = generate_data_token($row['id'], $row['email']);
 		    $jwt = generate_jwt_token($data_token);
 		    $exp = $data_token['exp'];
-		    $current_id = 1;
+		    $current_id = $row['id'];
               try {
 			    
 			    $query = "UPDATE users SET token = :token ,token_exp = :token_exp WHERE id = :id";

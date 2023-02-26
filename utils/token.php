@@ -60,7 +60,7 @@ function validate_token_and_role($token, $roles)
 			$message = "Expired Token";
 		}
 	}
-	} else {
+	else {
 		$valid = false;
 		$message = "Invalid Token";
 	}
