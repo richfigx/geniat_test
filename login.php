@@ -25,20 +25,22 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
         if (password_verify($password, $row['password'])) {
               $data_token = generate_data_token($row['id'], $row['email']);
 		    $jwt = generate_jwt_token($data_token);
+		    $exp = $data_token['exp'];
+		    $current_id = 1;
               try {
 			    
 			    $query = "UPDATE users SET token = :token ,token_exp = :token_exp WHERE id = :id";
 			    $stmt = $con->prepare($query);
 			    
 			    $stmt->bindValue(':token', $jwt);
-			    $stmt->bindValue(':token_exp', date('Y-m-d H:i:s',$data_token['exp']));
-			    $stmt->bindValue(':id', $row['id']);
-			    
+			    $stmt->bindValue(':token_exp',$exp);
+			    $stmt->bindValue(':id', $current_id);
+
 			    if ($stmt->execute() &&  $stmt->rowCount()) {
 				    $data = ['token' => $jwt];
                     } else {
                         $error = true;
-                        $message = "Nothing inserted!";
+                        $message = "DB Error Login Failed!";
                     }
                 } catch (PDOException $exception) {
                     $error = true;

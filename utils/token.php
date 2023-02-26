@@ -3,6 +3,8 @@
 include __DIR__ . "/../../vendor/autoload.php";
 use Firebase\JWT\JWT;
 
+require_once __DIR__ . "/../database/db.php";
+
 define('KEY', '6fe6f886d2148c5d97e4bfc0741fc218');
 
 function generate_data_token($userID, $userEmail)
@@ -29,6 +31,26 @@ function generate_jwt_token($data_token)
 
 function validate_token($token)
 {
-	$valid = "";
-	return $valid;
+	try {
+		$query = "SELECT id,password FROM users WHERE token = :token";
+		$stmt = $con->prepare($query);
+		$stmt->bindValue(':token', $token);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (PDOException $exception) {
+		return false;
+	}
+
+	if ($row) {
+		$time = time();
+		if ($row['token_exp'] > $time){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	} else {
+		return false;
+	}
 }

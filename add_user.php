@@ -54,7 +54,7 @@ if (isset($headers['Authorization'])) {
                         $data = $user;
                     } else {
                         $error = true;
-                        $message = "Nothing inserted!";
+                        $message = "DB Error Login Failed!";
                     }
                 } catch (PDOException $exception) {
                     $error = true;
