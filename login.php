@@ -25,23 +25,17 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
         if (password_verify($password, $row['password'])) {
               $data_token = generate_data_token($row['id'], $row['email']);
 		    $jwt = generate_jwt_token($data_token);
-              $data = ['token' => $jwt];
               try {
-
-                    $query = "UPDATE users (token,token_exp) VALUES (:token,:token_exp)";
-                    $stmt = $con->prepare($query);
-
-                    $stmt->bindValue(':token', $jwt);
-                    $stmt->bindValue(':token_exp', $data_token['exp']);
-
-
-                    if ($stmt->execute()) {
-
-                        $user['id']   = $con->lastInsertId();
-                        $user['name']   = $name;
-                        $user['email']   = $email;
-
-                        $data = $user;
+			    
+			    $query = "UPDATE users (token,token_exp) VALUES (:token,:token_exp)";
+			    $stmt = $con->prepare($query);
+			    
+			    $stmt->bindValue(':token', $jwt);
+			    $stmt->bindValue(':token_exp', $data_token['exp']);
+			    
+			    
+			    if ($stmt->execute()) {
+				    $data = ['token' => $jwt];
                     } else {
                         $error = true;
                         $message = "Nothing inserted!";
