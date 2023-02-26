@@ -29,8 +29,10 @@ function generate_jwt_token($data_token)
 	return $jwt;
 }
 
-function validate_token($token)
+function validate_token_and_role($token, $roles)
 {
+	$valid = false;
+	$message = "";
 	try {
 		$query = "SELECT id,password FROM users WHERE token = :token";
 		$stmt = $con->prepare($query);
@@ -38,19 +40,30 @@ function validate_token($token)
 		$stmt->execute();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	} catch (PDOException $exception) {
-		return false;
+		$valid = false;
+		$message = "db connection error";
 	}
 
 	if ($row) {
 		$time = time();
 		if ($row['token_exp'] > $time){
-			return true;
+			if (in_array($row['role'], $roles)) {
+				$valid = true;
+			}
+			else{
+				$valid = false;
+				$message = "You do not have sufficient permissions to perform this action";
+			}
 		}
 		else{
-			return false;
+			$valid = false;
+			$message = "Expired Token";
 		}
 	}
 	} else {
-		return false;
+		$valid = false;
+		$message = "Invalid Token";
 	}
+	$res = ["valid" => $valid, "message" => $message];
+	return $res;
 }
