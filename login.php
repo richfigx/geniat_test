@@ -31,7 +31,7 @@ if (isset($_POST['email']) && $_POST['email'] <> '' && isset($_POST['password'])
 			    $stmt = $con->prepare($query);
 			    
 			    $stmt->bindValue(':token', $jwt);
-			    $stmt->bindValue(':token_exp', $data_token['exp']);
+			    $stmt->bindValue(':token_exp', date('Y-m-d H:i:s',$data_token['exp']));
 			    $stmt->bindValue(':id', $row['id']);
 			    
 			    if ($stmt->execute() &&  $stmt->rowCount()) {
