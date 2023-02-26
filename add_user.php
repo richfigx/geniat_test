@@ -1,9 +1,11 @@
 <?php
-$error = false;
 
-$permit_roles = ['alto','alto_medio','medio_alto'];
+require_once("utils/headers.php");
 
 $headers = apache_request_headers();
+$error = false;
+$permit_roles = ['alto','alto_medio','medio_alto'];
+
 
 if (isset($headers['Authorization'])) {
 
@@ -11,7 +13,7 @@ if (isset($headers['Authorization'])) {
 
     $token = $headers['Authorization'];
 
-    $validation = validate_token_and_role($token, $permit_roles)
+    $validation = validate_token_and_role($token, $permit_roles);
 
     if(!$validation["valid"]){
 		$error = true;
